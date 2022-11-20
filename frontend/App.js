@@ -2,8 +2,10 @@ import 'regenerator-runtime/runtime';
 import React from 'react';
 
 import './assets/global.css';
+import './App.css';
 
 import { EducationalText, SignInPrompt, SignOutButton } from './ui-components';
+import Gallery from './components/Gallery'
 
 
 export default function App({ isSignedIn, helloNEAR, wallet }) {
@@ -42,8 +44,9 @@ export default function App({ isSignedIn, helloNEAR, wallet }) {
   return (
     <>
       <SignOutButton accountId={wallet.accountId} onClick={() => wallet.signOut()}/>
+
       <main className={uiPleaseWait ? 'please-wait' : ''}>
-        <h1>
+        {/* <h1>
           The contract says: <span className="greeting">{valueFromBlockchain}</span>
         </h1>
         <form onSubmit={changeGreeting} className="change">
@@ -60,7 +63,8 @@ export default function App({ isSignedIn, helloNEAR, wallet }) {
             </button>
           </div>
         </form>
-        <EducationalText/>
+        <EducationalText/> */}
+        <Gallery wallet={wallet}/>
       </main>
     </>
   );

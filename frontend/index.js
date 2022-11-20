@@ -1,7 +1,8 @@
 // React
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import App from './App';
+import { createRoot } from 'react-dom/client'
 
 // NEAR
 import { HelloNEAR } from './near-interface';
@@ -14,12 +15,18 @@ const wallet = new Wallet({ createAccessKeyFor: process.env.CONTRACT_NAME })
 // Abstract the logic of interacting with the contract to simplify your flow
 const helloNEAR = new HelloNEAR({ contractId: process.env.CONTRACT_NAME, walletToUse: wallet });
 
-// Setup on page load
+const client = new ApolloClient({
+  uri: "https://interop-mainnet.hasura.app/v1/graphql",
+  // uri: "https://interop-testnet.hasura.app/v1/graphql/",
+  cache: new InMemoryCache()
+});
+
 window.onload = async () => {
   const isSignedIn = await wallet.startUp()
- 
-  ReactDOM.render(
-    <App isSignedIn={isSignedIn} helloNEAR={helloNEAR} wallet={wallet} />,
-    document.getElementById('root')
-  );
+  const root = createRoot(document.getElementById('root'))
+
+  root.render(
+  <ApolloProvider client={client}>
+    <App isSignedIn={isSignedIn} helloNEAR={helloNEAR} wallet={wallet} />
+  </ApolloProvider>)
 }
